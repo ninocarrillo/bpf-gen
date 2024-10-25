@@ -6,12 +6,20 @@ import matplotlib.pyplot as plt
 from scipy.signal import firwin
 
 def InitBPF(this):
-	this['Taps'] = firwin(
-		this['tap count'],
-		[ this['low cutoff'], this['high cutoff'] ],
-		pass_zero='bandpass',
-		fs=this['sample rate']
-	)
+	if this['low cutoff'] > 0:
+		this['Taps'] = firwin(
+			this['tap count'],
+			[ this['low cutoff'], this['high cutoff'] ],
+			pass_zero='bandpass',
+			fs=this['sample rate']
+		)
+	else:
+		this['Taps'] = firwin(
+			this['tap count'],
+			[ this['high cutoff'] ],
+			pass_zero='lowpass',
+			fs=this['sample rate']
+		)
 	return this
 	
 def GenInt16ArrayC(name, array, column_width):
